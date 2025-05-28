@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>YouTube to MP3/MP4 Converter - iOS Optimized</title>
+    <meta name="description" content="Convert YouTube videos to MP3 and MP4 format. Optimized for iPhone and iOS devices. Fast, free, and easy to use.">
+    <meta name="author" content="YouTube Converter">
+    <meta name="keywords" content="youtube converter, mp3, mp4, ios, iphone, download, video converter">
+
+    <!-- iOS Specific Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="YT Converter">
+    
+    <!-- Prevent zoom on iOS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <meta property="og:title" content="YouTube to MP3/MP4 Converter">
+    <meta property="og:description" content="Convert YouTube videos to MP3 and MP4 format. Optimized for iPhone and iOS devices.">
+    <meta property="og:type" content="website">
+
+    <!-- Favicon for iOS -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #fef7f7 0%, #fdf2f8 50%, #faf5ff 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 28rem;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .youtube-icon {
+            width: 2rem;
+            height: 2rem;
+            color: #ef4444;
+        }
+
+        .title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ef4444, #ec4899);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            background: white;
+            transition: all 0.2s;
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .input:disabled {
+            background-color: #f3f4f6;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .alert {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .alert-error {
+            background-color: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .alert-icon {
+            width: 1rem;
+            height: 1rem;
+            flex-shrink: 0;
+        }
+
+        .video-info {
+            background-color: #f9fafb;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .video-info-content {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .thumbnail {
+            width: 4rem;
+            height: 3rem;
+            object-fit: cover;
+            border-radius: 0.25rem;
+            flex-shrink: 0;
+        }
+
+        .video-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .video-title {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #111827;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-bottom: 0.25rem;
+        }
+
+        .video-duration {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: white;
+        }
+
+        .button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .button-mp3 {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .button-mp3:hover:not(:disabled) {
+            background: linear-gradient(135deg, #059669, #047857);
+        }
+
+        .button-mp4 {
+            background: linear-gradient(135deg, #3b82f6, #0ea5e9);
+        }
+
+        .button-mp4:hover:not(:disabled) {
+            background: linear-gradient(135deg, #2563eb, #0284c7);
+        }
+
+        .button-icon {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .spinner {
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .info-text {
+            font-size: 0.75rem;
+            color: #6b7280;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .info-text p {
+            margin-bottom: 0.25rem;
+        }
+
+        .legal-notice {
+            background-color: #fefce8;
+            border: 1px solid #fde047;
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+
+        .legal-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 0.5rem;
+        }
+
+        .legal-content {
+            font-size: 0.75rem;
+            color: #a16207;
+            line-height: 1.4;
+        }
+
+        .legal-content p {
+            margin-bottom: 0.25rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem 0.5rem;
+            }
+            
+            .card {
+                padding: 1rem;
+            }
+            
+            .title {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-title">
+                <svg class="youtube-icon" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+                <h1 class="title">YouTube Converter</h1>
+            </div>
+            <p class="subtitle">Convert YouTube videos to MP3 or MP4 for offline listening</p>
+        </div>
+
+        <div class="card">
+            <div class="form-group">
+                <label for="youtube-url" class="label">YouTube URL</label>
+                <input
+                    id="youtube-url"
+                    type="url"
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    class="input"
+                >
+            </div>
+
+            <div id="error-alert" class="alert alert-error hidden">
+                <svg class="alert-icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+                <span id="error-message"></span>
+            </div>
+
+            <div id="video-info" class="video-info hidden">
+                <div class="video-info-content">
+                    <img id="video-thumbnail" src="" alt="Video thumbnail" class="thumbnail">
+                    <div class="video-details">
+                        <p id="video-title" class="video-title"></p>
+                        <p class="video-duration">Duration: <span id="video-duration"></span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-grid">
+                <button id="mp3-btn" class="button button-mp3">
+                    <svg class="button-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    <span>MP3</span>
+                </button>
+                
+                <button id="mp4-btn" class="button button-mp4">
+                    <svg class="button-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    <span>MP4</span>
+                </button>
+            </div>
+
+            <div class="info-text">
+                <p>• MP3: Audio only, smaller file size</p>
+                <p>• MP4: Video with audio, higher quality</p>
+                <p>• Files are optimized for iOS devices</p>
+            </div>
+        </div>
+
+        <div class="legal-notice">
+            <h3 class="legal-title">⚖️ Legal Notice</h3>
+            <div class="legal-content">
+                <p>• Only download content you own or have permission to use</p>
+                <p>• Respect copyright laws and YouTube's Terms of Service</p>
+                <p>• This tool is for personal, non-commercial use only</p>
+                <p>• We are not responsible for any misuse of downloaded content</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let isLoading = false;
+        let videoInfo = null;
+
+        // DOM elements
+        const urlInput = document.getElementById('youtube-url');
+        const mp3Btn = document.getElementById('mp3-btn');
+        const mp4Btn = document.getElementById('mp4-btn');
+        const errorAlert = document.getElementById('error-alert');
+        const errorMessage = document.getElementById('error-message');
+        const videoInfoDiv = document.getElementById('video-info');
+        const videoThumbnail = document.getElementById('video-thumbnail');
+        const videoTitle = document.getElementById('video-title');
+        const videoDuration = document.getElementById('video-duration');
+
+        // Utility functions
+        function isValidYouTubeUrl(url) {
+            const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/)|youtu\.be\/)[\w-]+/;
+            return youtubeRegex.test(url);
+        }
+
+        function extractVideoId(url) {
+            const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+            const match = url.match(regex);
+            return match ? match[1] : null;
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorAlert.classList.remove('hidden');
+        }
+
+        function hideError() {
+            errorAlert.classList.add('hidden');
+        }
+
+        function setLoading(loading) {
+            isLoading = loading;
+            const buttons = [mp3Btn, mp4Btn];
+            
+            buttons.forEach(btn => {
+                btn.disabled = loading;
+                const icon = btn.querySelector('.button-icon');
+                
+                if (loading) {
+                    icon.innerHTML = '<div class="spinner"></div>';
+                } else {
+                    // Restore download icon
+                    icon.innerHTML = `
+                        <svg class="button-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    `;
+                }
+            });
+            
+            urlInput.disabled = loading;
+        }
+
+        function showVideoInfo(info) {
+            videoInfo = info;
+            videoThumbnail.src = info.thumbnail;
+            videoTitle.textContent = info.title;
+            videoDuration.textContent = info.duration;
+            videoInfoDiv.classList.remove('hidden');
+        }
+
+        function hideVideoInfo() {
+            videoInfo = null;
+            videoInfoDiv.classList.add('hidden');
+        }
+
+        // API simulation function
+        async function simulateApiCall(videoId, format) {
+            // Simulate network delay
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            // Mock video info
+            const mockVideoInfo = {
+                title: 'Sample YouTube Video',
+                thumbnail: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`,
+                duration: '3:45'
+            };
+
+            // Generate a blob URL for demonstration
+            const mockContent = format === 'mp3' ? 'Mock MP3 content' : 'Mock MP4 content';
+            const blob = new Blob([mockContent], { 
+                type: format === 'mp3' ? 'audio/mpeg' : 'video/mp4' 
+            });
+            const downloadUrl = URL.createObjectURL(blob);
+
+            return {
+                success: true,
+                downloadUrl,
+                title: mockVideoInfo.title,
+                videoInfo: mockVideoInfo
+            };
+        }
+
+        // Main download function
+        async function handleDownload(format) {
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                showError('Please enter a YouTube URL');
+                return;
+            }
+
+            if (!isValidYouTubeUrl(url)) {
+                showError('Please enter a valid YouTube URL');
+                return;
+            }
+
+            setLoading(true);
+            hideError();
+
+            try {
+                const videoId = extractVideoId(url);
+                if (!videoId) {
+                    throw new Error('Invalid YouTube URL');
+                }
+
+                console.log(`Starting ${format.toUpperCase()} download for:`, url);
+                
+                const result = await simulateApiCall(videoId, format);
+                
+                if (result.success && result.downloadUrl) {
+                    // Create download link
+                    const link = document.createElement('a');
+                    link.href = result.downloadUrl;
+                    link.download = `${result.title || 'video'}.${format}`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                    if (result.videoInfo) {
+                        showVideoInfo(result.videoInfo);
+                    }
+                } else {
+                    showError(result.error || 'Download failed. Please try again.');
+                }
+            } catch (error) {
+                showError('An error occurred. Please check your connection and try again.');
+                console.error('Download error:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        // Event listeners
+        mp3Btn.addEventListener('click', () => handleDownload('mp3'));
+        mp4Btn.addEventListener('click', () => handleDownload('mp4'));
+
+        // Clear video info when URL changes
+        urlInput.addEventListener('input', () => {
+            hideVideoInfo();
+            hideError();
+        });
+
+        // Handle Enter key in input
+        urlInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !isLoading) {
+                handleDownload('mp3'); // Default to MP3 on Enter
+            }
+        });
+
+        console.log('YouTube Converter initialized successfully');
+    </script>
+</body>
+</html>
